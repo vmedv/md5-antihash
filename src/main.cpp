@@ -1,4 +1,5 @@
 #include <chrono>
+#include <conio.h>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -36,8 +37,17 @@ int main(int argc, char **argv) {
             target);
     bf.start();
 
-
-
+    while (!bf.is_ready()) {
+        while (!kbhit()) {
+            if (bf.is_ready()) goto drop_toggling;
+        }
+        int c = getch();
+        if (c == 'p') {
+            bf.toggle();
+            std::cout << "toggled\n";
+        }
+    }
+    drop_toggling:
     auto r = bf.result();
 
     std::cout << "result: " << r << std::endl;
