@@ -1,5 +1,9 @@
 #include <chrono>
+
+#ifdef _MSC_VER
 #include <conio.h>
+#endif
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -37,17 +41,19 @@ int main(int argc, char **argv) {
             target);
     bf.start();
 
+#ifdef _MSC_VER
     while (!bf.is_ready()) {
-        while (!kbhit()) {
-            if (bf.is_ready()) goto drop_toggling;
-        }
-        int c = getch();
-        if (c == 'p') {
-            bf.toggle();
-            std::cout << "toggled\n";
-        }
+      while (!kbhit()) {
+        if (bf.is_ready()) goto drop_toggling;
+      }
+      int c = getch();
+      if (c == 'p') {
+        bf.toggle();
+        std::cout << "toggled\n";
+      }
     }
-    drop_toggling:
+drop_toggling:
+#endif
     auto r = bf.result();
 
     std::cout << "result: " << r << std::endl;
